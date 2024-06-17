@@ -1,6 +1,6 @@
 pipelines:
     - name: Testing_Xray
-    steps: 
+      steps: 
         - name: test
           type: Bash
           configuration:
