@@ -10,7 +10,7 @@ pipelines:
             onExecute:
                 - touch test.txt
                 - echo "Hello World" > test.txt
-                - jf rt u test.txt jfrogpipelines 
-                - jf rt dl jfrogpipelines/test.txt
-                - jf rt del jfrogpipelines/test.txt
+                - jfrog rt u test.txt jfrogpipelines 
+                - jfrog rt dl jfrogpipelines/test.txt
+                - jfrog rt del jfrogpipelines/test.txt
                 
