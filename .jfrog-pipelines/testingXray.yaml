@@ -10,4 +10,4 @@ pipelines:
             onExecute:
                 - touch test.txt
                 - echo "Hello World" > test.txt
-                - jfrog s test.txt
+                - jfrog scan test.txt
