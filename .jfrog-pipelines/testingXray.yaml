@@ -1,10 +1,11 @@
 pipelines:
     - name: Testing_Xray
+      configuration:
+          jfrogCliVersion: 2
       steps: 
         - name: test
           type: Bash
           configuration:
-            jfrogCliVersion: 2
             integrations:
                 - name: jfrog_platform_embedded_pipelines
           execution:
