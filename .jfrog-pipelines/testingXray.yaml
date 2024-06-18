@@ -1,3 +1,9 @@
+resources:
+    - name: build
+      type: CronTrigger
+      configuration:
+        interval: "0 */10 * ? * *"
+
 pipelines:
     - name: Testing_Xray
       configuration:
@@ -8,6 +14,9 @@ pipelines:
           configuration:
             integrations:
                 - name: jfrog_platform_embedded_pipelines
+            inputResources:
+                - name: build
+                  trigger: true
           execution:
             onExecute:
                 - touch test.txt
