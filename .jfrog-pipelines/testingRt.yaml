@@ -1,5 +1,5 @@
 resources:
-    - name: build
+    - name: buildRt
       type: CronTrigger
       configuration:
         interval: "0 */10 * ? * *"
@@ -11,7 +11,7 @@ pipelines:
           type: Bash
           configuration:
             inputResources:
-                - name: build
+                - name: buildRt
                   trigger: true
             integrations:
                 - name: jfrog_platform_embedded_pipelines
