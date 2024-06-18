@@ -2,7 +2,7 @@ resources:
     - name: buildRt
       type: CronTrigger
       configuration:
-        interval: "0 */10 * ? * *"
+        interval: '*/10 * * * *'
 
 pipelines:
     - name: Testing_Artifactory
