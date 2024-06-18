@@ -4,10 +4,11 @@ pipelines:
         - name: test
           type: Bash
           configuration:
+            jfrogCliVersion: 2
             integrations:
                 - name: jfrog_platform_embedded_pipelines
           execution:
             onExecute:
                 - touch test.txt
                 - echo "Hello World" > test.txt
-                - jf s test.txt
+                - jfrog scan test.txt
