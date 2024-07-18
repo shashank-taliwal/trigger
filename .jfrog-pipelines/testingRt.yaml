@@ -3,6 +3,11 @@ resources:
       type: CronTrigger
       configuration:
         interval: '*/10 * * * *'
+    - name: uploadResult
+      type: PropertyBag
+      configuration:
+          result: ''
+
 
 pipelines:
     - name: Testing_Artifactory
@@ -10,16 +15,37 @@ pipelines:
         - name: test
           type: Bash
           configuration:
+            timeoutSeconds: 200
             inputResources:
                 - name: buildRt
                   trigger: true
+            outputResources:
+              - name: uploadResult
             integrations:
                 - name: jfrog_platform_embedded_pipelines
           execution:
+            onStart:
+                - echo "Starting"
+                - write_output "uploadResult" "result=false" 
             onExecute:
                 - touch test.txt
                 - echo "Hello World" > test.txt
                 - jfrog rt u test.txt jfrogpipelines 
                 - jfrog rt dl jfrogpipelines/test.txt
                 - jfrog rt del jfrogpipelines/test.txt
-                
+            onSuccess:
+                - write_output "uploadResult" "result=true"
+        - name: result
+          type: Bash
+          configuration:
+            inputResources:
+                - name: uploadResult
+            inputSteps:
+                - name: test
+          execution:
+              onExecute:
+               - |
+                  if [ $res_uploadResult_result == "true" ]; then
+                      exit 0;
+                  fi
+               - exit 1 
