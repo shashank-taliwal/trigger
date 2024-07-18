@@ -3,6 +3,10 @@ resources:
       type: CronTrigger
       configuration:
         interval: '*/10 * * * *'
+    - name: scanResult
+      type: PropertyBag
+      configuration:
+          result: ''
 
 pipelines:
     - name: Testing_Xray
@@ -13,12 +17,34 @@ pipelines:
           type: Bash
           configuration:
             integrations:
-                - name: jfrog_platform_embedded_pipelines
+               - name: jfrog_platform_embedded_pipelines
             inputResources:
                 - name: build
                   trigger: true
+            outputResources:
+                - name: scanResult
+            timeoutSeconds: 200
           execution:
+            onStart:
+                - echo "Starting"
+                - write_output "scanResult" "result=false" 
             onExecute:
                 - touch test.txt
                 - echo "Hello World" > test.txt
                 - jfrog scan test.txt
+            onSuccess:
+                - write_output "scanResult" "result=true"
+        - name: result
+          type: Bash
+          configuration:
+            inputResources:
+                - name: scanResult
+            inputSteps:
+                - name: test
+          execution:
+              onExecute:
+               - |
+                  if [ $res_scanResult_result == "true" ]; then
+                      exit 0;
+                  fi
+               - exit 1
